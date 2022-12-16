@@ -44,19 +44,22 @@ class Problem(object):
     def h(self, node):               return 0                    # p. 84: This function (method) is for informed (heuristic) search. 
     
     def __str__(self):                                           # A method for representing the <object> instantiation of Problem as a string, callable as print(<object>) .
-        return '{}({!r}, {!r})'.format(                          # string.format(<positional_argument(s)>, <keyword_argument(s)>) # https://realpython.com/python-formatted-output/
-            type(self).__name__, self.initial, self.goal)        # ... 
-    
+        return '{}({!r}, {!r},)'.format(                         # string.format(<positional_argument(s)>, <keyword_argument(s)>) # https://realpython.com/python-formatted-output/
+            type(self).__name__, self.initial, self.goal)        # ...
+      # return '{}({!r}, {!r}, {!r},)'.format(                  
+      #      type(self).__name__, self.initial, self.goal, self.kwd)    
 ###############################################################################
 # run
 
-p1 = Problem(1, 2)
-p2 = Problem("a", "b", kwd="testingKwd")
+# p1 = Problem(1, 2, kwd="p1testkwd")
+# print(p1)
 
-print(p1)
-print(p2)
-# print(p1.type)
+# p2 = Problem("a", "b", kwd="testingKwd")
+# print(p2)
 
+# type(p1).__name__
+
+#  p1.actions(2) # demo: throws NotImplementedError
 ###############################################################################
 # class Node:
 #     "A Node in a search tree."
