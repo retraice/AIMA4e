@@ -27,11 +27,11 @@
 ###############################################################################
 # ANNOTATED AIMA GITHUB CODE
 
-class Problem(object):                                           # define class Problem as subclass of <object>. ***IMPORTANT: During the
-                                                                 # livestream I mistakenly indicated that <object> stood for the name given
-                                                                 # to an instance of the class Problem.  That is incorrect.  <self> is the
-                                                                 # name; <object> is the parent class or super class that Problem subclasses
-                                                                 # and inherits attributes and methods from.***
+class Problem(object):                                               # define class Problem as subclass of <object>. ***IMPORTANT: During the
+                                                                     # livestream I mistakenly indicated that <object> stood for the name given
+                                                                     # to an instance of the class Problem.  That is incorrect.  <self> is the
+                                                                     # name; <object> is the parent class or super class that Problem subclasses
+                                                                     # and inherits attributes and methods from.***
 
     """The abstract class for a formal problem. A new domain subclasses this,
     overriding `actions` and `results`, and perhaps other methods.
@@ -39,19 +39,26 @@ class Problem(object):                                           # define class 
     When yiou create an instance of a subclass, specify `initial`, and `goal` states 
     (or give an `is_goal` method) and perhaps other keyword args for the subclass."""
 
-    def __init__(self, initial=None, goal=None, **kwds):           # initialize the instance of Problem named <self> in memory
-        self.__dict__.update(initial=initial, goal=goal, **kwds)   # add argument values to self dictionary
-                                                                   
-    def actions(self, state):        raise NotImplementedError     # p. 65: This function (method) returns a finite set of actions that can be executed in state.
-    def result(self, state, action): raise NotImplementedError     # p. 65: This function (method) is the transition model; it returns the state that results from doing action on state.
-    def is_goal(self, state):        return state == self.goal     # p. 65: This function (method) checks the current state and returns it if it is a goal state.
-    def action_cost(self, s, a, s1): return 1                      # p. 65: This function (method) is the action cost function, and returns the numeric cost of applying action a in state s to reach state s1.
-    def h(self, node):               return 0                      # p. 84: This function (method) is for informed (heuristic) search. 
+    def __init__(self, initial=None, goal=None, **kwds):             # initialize the instance of Problem named <self> in memory
+        self.__dict__.update(initial=initial, goal=goal, **kwds)     # add argument values to self dictionary
+
+        
+    def actions(self, state):        raise NotImplementedError       # p. 65: This function (method) returns a finite set of actions that can be
+                                                                     # executed in state.
+    def result(self, state, action): raise NotImplementedError       # p. 65: This function (method) is the transition model; it returns the
+                                                                     # state that results from doing action on state.
+    def is_goal(self, state):        return state == self.goal       # p. 65: This function (method) checks the current state and returns it if
+                                                                     # it is a goal state.
+    def action_cost(self, s, a, s1): return 1                        # p. 65: This function (method) is the action cost function, and returns
+                                                                     # the numeric cost of applying action a in state s to reach state s1.
+    def h(self, node):               return 0                        # p. 84: This function (method) is for informed (heuristic) search.
+
     
-    def __str__(self):                                             # A method for representing the <self> instantiation of Problem as a string, callable as print(<self>) .
-    # return '{}({!r}, {!r},)'.format(                             # string.format(<positional_argument(s)>, <keyword_argument(s)>) # https://realpython.com/python-formatted-output/
-     #     type(self).__name__, self.initial, self.goal)           # ...
-      return '{}({!r}, {!r}, {!r},)'.format(                       # A modified version of the previous two lines, to enable printing kwd.
+    def __str__(self):                                               # A method for representing the <self> instantiation of Problem as a
+                                                                     # string, callable as print(<self>) .
+#     return '{}({!r}, {!r},)'.format(                               # string.format(<positional_argument(s)>, <keyword_argument(s)>) 
+#          type(self).__name__, self.initial, self.goal)             # https://realpython.com/python-formatted-output/
+      return '{}({!r}, {!r}, {!r},)'.format(                         # A modified version of the previous two lines, to enable printing kwd.
            type(self).__name__, self.initial, self.goal, self.kwd)    
 ###############################################################################
 # run
