@@ -1,5 +1,5 @@
-# 2022-1216f
-# Local: ReAIMA4e/Re84
+# 2022-1217s
+# Local: ReAIMA4e/Re85
 # source of code: https://github.com/aimacode/aima-python/blob/master/search4e.ipynb
 
 ###############################################################################
@@ -24,7 +24,7 @@
 # from collections import defaultdict, deque, Counter
 # from itertools import combinations
 ########################################################################################################################
-# ANNOTATED AIMA GITHUB CODE
+# ANNOTATED AIMA GITHUB CODE:
 
 class Problem(object):                                               # define class Problem as subclass of
                                                                      # <object>. ***IMPORTANT: During the livestream I
@@ -70,7 +70,7 @@ class Problem(object):                                               # define cl
                                                                      # enable printing kwd.
            type(self).__name__, self.initial, self.goal, self.kwd)    
 ########################################################################################################################
-# run
+# run in ipython (Re83):
 
 # p1 = Problem(1, 2, kwd="p1testkwd")
 # print(p1)
@@ -82,10 +82,7 @@ class Problem(object):                                               # define cl
 
 #  p1.actions(2) # demo: throws NotImplementedError
 ########################################################################################################################
-# dir(<self>)                 # see all methods and properties
-# <self>.__dict__             # see all attributes and values
-########################################################################################################################
-
+# AIMA:
 class Node:
     "A Node in a search tree."
     def __init__(self, state, parent=None, action=None, path_cost=0):                        # We're going to have to
@@ -103,31 +100,41 @@ class Node:
                                                                                              
     def __lt__(self, other): return self.path_cost < other.path_cost                         # less-than method
 
-########################################################################################################################    
-n1 = Node("s1", "Mom","uuum", 18)
-n2 = Node("s2", "Nature", "evolution", 2000000000)
-print(n1)
-print(dir(n1))
-print(n1.__dict__)
-print(len(n1))
-print(len(n1.parent))
-print(len(n1), len(n2))
-print(n1.path_cost)
-print(n2.path_cost)
-print(n1 > n2)
-########################################################################################################################    
-# failure = Node('failure', path_cost=math.inf) # Indicates an algorithm couldn't find a solution.
-# cutoff  = Node('cutoff',  path_cost=math.inf) # Indicates iterative deepening search was cut off.
-    
-    
-# def expand(problem, node):
-#     "Expand a node, generating the children nodes."
-#     s = node.state
-#     for action in problem.actions(s):
-#         s1 = problem.result(s, action)
-#         cost = node.path_cost + problem.action_cost(s, action, s1)
-#         yield Node(s1, node, action, cost)
-        
+########################################################################################################################
+# run (Re84):
+
+# n1 = Node("s1", "Mom","uuum", 18)
+# n2 = Node("s2", "Nature", "evolution", 2000000000)
+# print(n1)
+# print(dir(n1))                             # dir(<self>)       # see all methods and properties
+# print(n1.__dict__)                         # <self>.__dict__   # see all attributes and values
+# print(len(n1))
+# print(len(n1.parent))
+# print(len(n1), len(n2))
+# print(n1.path_cost)
+# print(n2.path_cost)
+# print(n1 > n2)
+########################################################################################################################
+# AIMA:
+failure = Node('failure', path_cost=math.inf) # Indicates an algorithm couldn't find a solution.
+cutoff  = Node('cutoff',  path_cost=math.inf) # Indicates iterative deepening search was cut off.
+########################################################################################################################
+# AIMA:
+
+def expand(problem, node):
+    "Expand a node, generating the children nodes."
+    s = node.state
+    for action in problem.actions(s):
+        s1 = problem.result(s, action)
+        cost = node.path_cost + problem.action_cost(s, action, s1)
+        yield Node(s1, node, action, cost)
+
+########################################################################################################################
+# run
+
+
+########################################################################################################################
+# AIMA:
 
 # def path_actions(node):
 #     "The sequence of actions to get to this node."
@@ -135,6 +142,8 @@ print(n1 > n2)
 #         return []  
 #     return path_actions(node.parent) + [node.action]
 
+########################################################################################################################
+# AIMA:
 
 # def path_states(node):
 #     "The sequence of states to get to this node."
@@ -142,3 +151,4 @@ print(n1 > n2)
 #         return []
 #     return path_states(node.parent) + [node.state]
 
+########################################################################################################################
