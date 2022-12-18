@@ -1,161 +1,150 @@
 # 2022-1217s
 # Local: ReAIMA4e/Re85
-# source of code: https://github.com/aimacode/aima-python/blob/master/search4e.ipynb
-
-###############################################################################
-# USEFUL COMMANDS FOR RUNNING IN A venv AND ipython
-
-# python -m venv vRe83
-# echo "vRe83/" >> .gitignore
-# source vRe83/bin/activate
-# pip install --upgrade pip
-# pip install matplotlib
-# pip install ipython
-
-###############################################################################
-# PROBLEMS AND NODES
-
-# %matplotlib inline # meant for use in jupyter notebook / .ipynb file # https://stackoverflow.com/questions/43027980/purpose-of-matplotlib-inline
-# import matplotlib.pyplot as plt
-# import random
-# import heapq
-# import math
-# import sys
-# from collections import defaultdict, deque, Counter
-# from itertools import combinations
+# source of (most of the) code: https://github.com/aimacode/aima-python/blob/master/search4e.ipynb
 ########################################################################################################################
-# ANNOTATED AIMA GITHUB CODE:
-
-class Problem(object):                                               # define class Problem as subclass of
-                                                                     # <object>. ***IMPORTANT: During the livestream I
-                                                                     # mistakenly indicated that <object> stood for the
-                                                                     # name given to an instance of the class Problem.
-                                                                     # That is incorrect.  <self> is the name; <object>
-                                                                     # is the parent class or super class that Problem
-                                                                     # subclasses and inherits attributes and methods
-                                                                     # from.***
-
+# #%matplotlib inline
+import matplotlib.pyplot as plt
+import random
+import heapq
+import math
+import sys
+from collections import defaultdict, deque, Counter
+from itertools import combinations
+########################################################################################################################
+class Problem(object):
     """The abstract class for a formal problem. A new domain subclasses this,
     overriding `actions` and `results`, and perhaps other methods.
     The default heuristic is 0 and the default action cost is 1 for all states.
     When yiou create an instance of a subclass, specify `initial`, and `goal` states 
     (or give an `is_goal` method) and perhaps other keyword args for the subclass."""
-
-    def __init__(self, initial=None, goal=None, **kwds):             # a magic method to initialize the instance of
-                                                                     # Problem named <self> in memory
-        self.__dict__.update(initial=initial, goal=goal, **kwds)     # add argument values to self dictionary
-
+    def __init__(self, initial=None, goal=None, **kwds): 
+        self.__dict__.update(initial=initial, goal=goal, **kwds) 
         
-    def actions(self, state):        raise NotImplementedError       # p. 65: This function (method) returns a finite
-                                                                     # set of actions that can be executed in state.
-    def result(self, state, action): raise NotImplementedError       # p. 65: This function (method) is the transition
-                                                                     # model; it returns the state that results from
-                                                                     # doing action on state.
-    def is_goal(self, state):        return state == self.goal       # p. 65: This function (method) checks the current
-                                                                     # state and returns it if it is a goal state.
-    def action_cost(self, s, a, s1): return 1                        # p. 65: This function (method) is the action cost
-                                                                     # function, and returns the numeric cost of
-                                                                     # applying action a in state s to reach state s1.
-    def h(self, node):               return 0                        # p. 84: This function (method) is for informed
-                                                                     # (heuristic) search.
-
+    def actions(self, state):        raise NotImplementedError  # ***NOT DONE***
+    def result(self, state, action): raise NotImplementedError  # ***NOT DONE***
+    def is_goal(self, state):        return state == self.goal
+    def action_cost(self, s, a, s1): return 1
+    def h(self, node):               return 0
     
-    def __str__(self):                                               # A magic method for representing the <self>
-                                                                     # instantiation of Problem as a string, callable as
-                                                                     # print(<self>) .
-#     return '{}({!r}, {!r},)'.format(                               # string.format(<positional_argument(s)>,
-                                                                    # <keyword_argument(s)>)
-#          type(self).__name__, self.initial, self.goal)             # https://realpython.com/python-formatted-output/
-      return '{}({!r}, {!r}, {!r},)'.format(                         # A modified version of the previous two lines, to
-                                                                     # enable printing kwd.
-           type(self).__name__, self.initial, self.goal, self.kwd)    
+    def __str__(self):
+        return '{}({!r}, {!r})'.format(
+            type(self).__name__, self.initial, self.goal)
 ########################################################################################################################
-# run in ipython (Re83):
-
-# p1 = Problem(1, 2, kwd="p1testkwd")
-# print(p1)
-
-# p2 = Problem("a", "b", kwd="testingKwd")
-# print(p2)
-
-# type(p1).__name__
-
-#  p1.actions(2) # demo: throws NotImplementedError
-########################################################################################################################
-# AIMA:
 class Node:
     "A Node in a search tree."
-    def __init__(self, state, parent=None, action=None, path_cost=0):                        # We're going to have to
-                                                                                             # store and fetch these
-                                                                                             # four attributes.
+    def __init__(self, state, parent=None, action=None, path_cost=0):
+        self.__dict__.update(state=state, parent=parent, action=action, path_cost=path_cost)
 
-        self.__dict__.update(state=state, parent=parent, action=action, path_cost=path_cost) # update the __dict__
-
-    def __repr__(self): return '<{}>'.format(self.state)                                     # Calling an object,
-                                                                                             # e.g. "n1", returns
-                                                                                             # e.g. "<s1>"
-                                                                                             
-    def __len__(self): return 0 if self.parent is None else (1 + len(self.parent))           # parent is itself a node,
-                                                                                             # so len is recursive.
-                                                                                             
-    def __lt__(self, other): return self.path_cost < other.path_cost                         # less-than method
-
-########################################################################################################################
-# run (Re84):
-
-# n1 = Node("s1", "Mom","uuum", 18)
-# n2 = Node("s2", "Nature", "evolution", 2000000000)
-# print(n1)
-# print(dir(n1))                             # dir(<self>)       # see all methods and properties
-# print(n1.__dict__)                         # <self>.__dict__   # see all attributes and values
-# print(len(n1))
-# print(len(n1.parent))
-# print(len(n1), len(n2))
-# print(n1.path_cost)
-# print(n2.path_cost)
-# print(n1 > n2)
-########################################################################################################################
-# AIMA:
+    def __repr__(self): return '<{}>'.format(self.state)
+    def __len__(self): return 0 if self.parent is None else (1 + len(self.parent))
+    def __lt__(self, other): return self.path_cost < other.path_cost
+########################################################################################################################    
 failure = Node('failure', path_cost=math.inf) # Indicates an algorithm couldn't find a solution.
 cutoff  = Node('cutoff',  path_cost=math.inf) # Indicates iterative deepening search was cut off.
-########################################################################################################################
-# AIMA:
-
-
+########################################################################################################################       
 def expand(problem, node):
     "Expand a node, generating the children nodes."
-    s = node.state
-    for action in problem.actions(s):
-        s1 = problem.result(s, action)
-        cost = node.path_cost + problem.action_cost(s, action, s1)
-        yield Node(s1, node, action, cost)
+    s = node.state                                 # set variable s equal to the state attribute of the given node
+    for action in problem.actions(s):              # for each action 
+        s1 = problem.result(s, action)             # s1 is the state that results from applying given action to state s
+        cost = node.path_cost + problem.action_cost(s, action, s1)  # set variable cost to cost of going to s1
+        yield Node(s1, node, action, cost) # generate child node given arguments s1, parent node, action applied, cost
+########################################################################################################################
+# run (Re85):
+
+stspace = [1, 27, 88, 77, 11, 4, 32]  # state space... needs to have actions
+getToEleven = Problem(1, 11)          # problem... ?? needs to subclass Problem and implement actions, result??
 
 ########################################################################################################################
-# run
+def best_first_search(problem, f):           # ***PROBLEM NOT DONE***
+    "Search nodes with minimum f(node) value first."
+    node = Node(problem.initial)             # done
+    frontier = PriorityQueue([node], key=f)  # ***NOT DONE***
+    reached = {problem.initial: node}    # create dict. reached: {'<problem initial state>': '<Node(problem.initial)>',}
+    while frontier:                          # Starting with first node in frontier, ??and continuing through queue??
+        node = frontier.pop()                # set node equal to the top node in frontier, removing it from queue
+        if problem.is_goal(node.state):      # check if the state of this node is the goal state of the problem
+            return node                      # if it is, return the node as output and stop
+        for child in expand(problem, node):  # if not, expand the node and for each child node of it....
+            s = child.state                  # set s equal to the child node's state
+            if s not in reached or child.path_cost < reached[s].path_cost: # if node is new or cheaper than known ones
+                reached[s] = child           # ?? add pair to reached dict. {'<child.state>': '<child node>',} ??
+                frontier.add(child)          # add <child node> to frontier queue.<see ***CORRECTION*** below>
+    return failure                           # if goal state not found by while loop above, return failure and stop. 
 
-# state space
-sspace = [1, 27, 88, 77, 11, 4, 32]
-# problem
-getToEleven = Problem(1, 11)
-#
-
-
+# ***CORRECTION***: During the livestream I said that after the while loop was done, we'd return to the newly updated
+# frontier. False.  The frontier updates at the end of each loop through the while, then the while starts over, and if
+# the while never finds a goal state, it terminates and return failure is executed. 
 ########################################################################################################################
-# AIMA:
-
-# def path_actions(node):
-#     "The sequence of actions to get to this node."
-#     if node.parent is None:
-#         return []  
-#     return path_actions(node.parent) + [node.action]
-
+# class RouteProblem(Problem):
+#     """A problem to find a route between locations on a `Map`.
+#     Create a problem with RouteProblem(start, goal, map=Map(...)}).
+#     States are the vertexes in the Map graph; actions are destination states."""
+    
+#     def actions(self, state): 
+#         """The places neighboring `state`."""
+#         return self.map.neighbors[state]
+    
+#     def result(self, state, action):
+#         """Go to the `action` place, if the map says that is possible."""
+#         return action if action in self.map.neighbors[state] else state
+    
+#     def action_cost(self, s, action, s1):
+#         """The distance (cost) to go from s to s1."""
+#         return self.map.distances[s, s1]
+    
+#     def h(self, node):
+#         "Straight-line distance between state and the goal."
+#         locs = self.map.locations
+#         return straight_line_distance(locs[node.state], locs[self.goal])
+    
 ########################################################################################################################
-# AIMA:
+# def straight_line_distance(A, B):  # seems to be for informed h search
+#     "Straight-line distance between two points."
+#     return sum(abs(a - b)**2 for (a, b) in zip(A, B)) ** 0.5
+########################################################################################################################
+# class Map:
+#     """A map of places in a 2D world: a graph with vertexes and links between them. 
+#     In `Map(links, locations)`, `links` can be either [(v1, v2)...] pairs, 
+#     or a {(v1, v2): distance...} dict. Optional `locations` can be {v1: (x, y)} 
+#     If `directed=False` then for every (v1, v2) link, we add a (v2, v1) link."""
 
-# def path_states(node):
-#     "The sequence of states to get to this node."
-#     if node in (cutoff, failure, None): 
-#         return []
-#     return path_states(node.parent) + [node.state]
+#     def __init__(self, links, locations=None, directed=False):
+#         if not hasattr(links, 'items'): # Distances are 1 by default
+#             links = {link: 1 for link in links}
+#         if not directed:
+#             for (v1, v2) in list(links):
+#                 links[v2, v1] = links[v1, v2]
+#         self.distances = links
+#         self.neighbors = multimap(links)
+#         self.locations = locations or defaultdict(lambda: (0, 0))
 
+# def multimap(pairs) -> dict:
+#     "Given (key, val) pairs, make a dict of {key: [val,...]}."
+#     result = defaultdict(list)
+#     for key, val in pairs:
+#         result[key].append(val)
+#     return result
+########################################################################################################################
+# Some specific RouteProblems
+
+# romania = Map(
+#     # actions
+#     {('O', 'Z'):  71, ('O', 'S'): 151, ('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118, 
+#      ('L', 'T'): 111, ('L', 'M'):  70, ('D', 'M'): 75, ('C', 'D'): 120, ('C', 'R'): 146, 
+#      ('C', 'P'): 138, ('R', 'S'):  80, ('F', 'S'): 99, ('B', 'F'): 211, ('B', 'P'): 101, 
+#      ('B', 'G'):  90, ('B', 'U'):  85, ('H', 'U'): 98, ('E', 'H'):  86, ('U', 'V'): 142, 
+#      ('I', 'V'):  92, ('I', 'N'):  87, ('P', 'R'): 97},
+#     # state space
+#     {'A': ( 76, 497), 'B': (400, 327), 'C': (246, 285), 'D': (160, 296), 'E': (558, 294), 
+#      'F': (285, 460), 'G': (368, 257), 'H': (548, 355), 'I': (488, 535), 'L': (162, 379),
+#      'M': (160, 343), 'N': (407, 561), 'O': (117, 580), 'P': (311, 372), 'R': (227, 412),
+#      'S': (187, 463), 'T': ( 83, 414), 'U': (471, 363), 'V': (535, 473), 'Z': (92, 539)})
+
+
+# r0 = RouteProblem('A', 'A', map=romania)
+# r1 = RouteProblem('A', 'B', map=romania)
+# r2 = RouteProblem('N', 'L', map=romania)
+# r3 = RouteProblem('E', 'T', map=romania)
+# r4 = RouteProblem('O', 'M', map=romania)
 ########################################################################################################################
