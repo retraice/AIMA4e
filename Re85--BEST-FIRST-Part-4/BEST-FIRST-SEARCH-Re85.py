@@ -121,6 +121,7 @@ cutoff  = Node('cutoff',  path_cost=math.inf) # Indicates iterative deepening se
 ########################################################################################################################
 # AIMA:
 
+
 def expand(problem, node):
     "Expand a node, generating the children nodes."
     s = node.state
