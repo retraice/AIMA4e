@@ -21,9 +21,9 @@ class Problem(object):
         self.__dict__.update(initial=initial, goal=goal, **kwds) 
         
     def actions(self, state):        raise NotImplementedError  # ***NOT DONE***
-    def result(self, state, action): raise NotImplementedError  # ***NOT DONE***
+    def result(self, state, action): raise NotImplementedError  # ***NOT DONE*** # in romania, state is x-y's, and action is (A B) miles.
     def is_goal(self, state):        return state == self.goal
-    def action_cost(self, s, a, s1): return 1
+    def action_cost(self, s, a, s1): return 1 # ***NOT DONE***
     def h(self, node):               return 0
     
     def __str__(self):
@@ -76,7 +76,7 @@ def best_first_search(problem, f):           # ***PROBLEM NOT DONE***
 
 class RouteProblem(Problem): # e.g. atobproblem = RouteProblem('A', 'B', map=simpleMap)
     """A problem to find a route between locations on a `Map`.
-    Create a problem with RouteProblem(start, goal, map=Map(...)}).
+    Create a problem with RouteProblem(start, goal, map=Map(...)}).              # here we'd pass the map romania
     States are the vertexes in the Map graph; actions are destination states."""
     
     def actions(self, state):   # e.g. atobproblem.actions(s1)
@@ -108,16 +108,16 @@ class Map:
     If `directed=False` then for every (v1, v2) link, we add a (v2, v1) link."""
 
     def __init__(self, links, locations=None, directed=False):
-        if not hasattr(links, 'items'): # Distances are 1 by default --AIMA ## 
-            links = {link: 1 for link in links}
-        if not directed:
-            for (v1, v2) in list(links):
-                links[v2, v1] = links[v1, v2]
+        if not hasattr(links, 'items'): # Distances are 1 by default --AIMA ## returns true or false
+            links = {link: 1 for link in links} # I think this is saying ... hmm
+        if not directed: # 'directed=False' by default above;
+            for (v1, v2) in list(links): 
+                links[v2, v1] = links[v1, v2] # 
         self.distances = links
         self.neighbors = multimap(links)
         self.locations = locations or defaultdict(lambda: (0, 0))
 
-def multimap(pairs) -> dict:
+def multimap(pairs) -> dict:          # seems like initializing dictionary per Althoff p. 76 thusly: thing = dict()
     "Given (key, val) pairs, make a dict of {key: [val,...]}."
     result = defaultdict(list)
     for key, val in pairs:
@@ -126,13 +126,13 @@ def multimap(pairs) -> dict:
 
 # Some specific RouteProblems
 romania = Map(  # instantiate class Map with following arguments: 
-    # actions?  Or distances? 
+    # 'links': acitons (p. 71): "`links` can be either [(v1, v2)...] pairs, or a {(v1, v2): distance...} dict."
     {('O', 'Z'):  71, ('O', 'S'): 151, ('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118, 
      ('L', 'T'): 111, ('L', 'M'):  70, ('D', 'M'): 75, ('C', 'D'): 120, ('C', 'R'): 146, 
      ('C', 'P'): 138, ('R', 'S'):  80, ('F', 'S'): 99, ('B', 'F'): 211, ('B', 'P'): 101, 
      ('B', 'G'):  90, ('B', 'U'):  85, ('H', 'U'): 98, ('E', 'H'):  86, ('U', 'V'): 142, 
      ('I', 'V'):  92, ('I', 'N'):  87, ('P', 'R'): 97},
-    # state space
+    # 'locations': state space (p. 71): "Optional `locations` can be {v1: (x, y)}"
     {'A': ( 76, 497), 'B': (400, 327), 'C': (246, 285), 'D': (160, 296), 'E': (558, 294), 
      'F': (285, 460), 'G': (368, 257), 'H': (548, 355), 'I': (488, 535), 'L': (162, 379),
      'M': (160, 343), 'N': (407, 561), 'O': (117, 580), 'P': (311, 372), 'R': (227, 412),
