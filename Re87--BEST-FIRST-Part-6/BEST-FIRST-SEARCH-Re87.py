@@ -1,5 +1,5 @@
-# 2022-1218u
-# Local: ReAIMA4e/Re86
+# 2022-1219m
+# Local: ReAIMA4e/Re87
 # source of (most of the) code: https://github.com/aimacode/aima-python/blob/master/search4e.ipynb
 
 # #%matplotlib inline
@@ -21,9 +21,11 @@ class Problem(object):
         self.__dict__.update(initial=initial, goal=goal, **kwds) 
         
     def actions(self, state):        raise NotImplementedError  # ***NOT DONE***
-    def result(self, state, action): raise NotImplementedError  # ***NOT DONE*** # in romania, state is x-y's, and action is (A B) miles.
+    def result(self, state, action): raise NotImplementedError  # ***NOT DONE***
+                                                                # in romania, state is "'A': ( 76, 497),",
+                                                                # and action is "('O', 'Z'): 71,".
     def is_goal(self, state):        return state == self.goal
-    def action_cost(self, s, a, s1): return 1 # ***NOT DONE***
+    def action_cost(self, s, a, s1): return 1                   # ***NOT DONE***
     def h(self, node):               return 0
     
     def __str__(self):
@@ -58,7 +60,7 @@ def best_first_search(problem, f):           # ***PROBLEM NOT DONE***
     # "Search nodes with minimum f(node) value first."
     node = Node(problem.initial)             # done
     frontier = PriorityQueue([node], key=f)  # ***NOT DONE***
-    reached = {problem.initial: node}    # create dict. reached: {'<problem initial state>': '<Node(problem.initial)>',}
+    reached = {problem.initial: node}   # create dict. reached: {'<problem initial state>': '<Node(problem.initial)>',}
     while frontier:                          # Starting with first node in frontier, ??and continuing through queue??
         node = frontier.pop()                # set node equal to the top node in frontier, removing it from queue
         if problem.is_goal(node.state):      # check if the state of this node is the goal state of the problem
@@ -108,22 +110,58 @@ class Map:
     # If `directed=False` then for every (v1, v2) link, we add a (v2, v1) link."""
 
     def __init__(self, links, locations=None, directed=False):
-        if not hasattr(links, 'items'): # Distances are 1 by default --AIMA ## returns true or false
-            links = {link: 1 for link in links} # I think this is saying ... hmm
-        if not directed: # 'directed=False' by default above;
-            for (v1, v2) in list(links):  # list() creates list object.
-                links[v2, v1] = links[v1, v2] # 
+        if not hasattr(links, 'items'):                            # Distances are 1 by default --AIMA ## returns t or f
+            links = {link: 1 for link in links}                    # If 
+        if not directed:                                           # 'directed=False' by default above;
+            for (v1, v2) in list(links):                           # list() creates list object.
+                links[v2, v1] = links[v1, v2]                      # 
         self.distances = links
         self.neighbors = multimap(links)
-        self.locations = locations or defaultdict(lambda: (0, 0)) # see "from collections import defaultdict, deque, Counter" above
+        self.locations = locations or defaultdict(lambda: (0, 0))  # "from collections import defaultdict" above
 
-def multimap(pairs) -> dict:          # "-> dict" is function annotation https://peps.python.org/pep-3107/
-    # "Given (key, val) pairs, make a dict of {key: [val,...]}."
-    result = defaultdict(list)  # see "from collections import defaultdict, deque, Counter" above; # list() creates list object.
-    for key, val in pairs:  # pairs will be links, as in "self.neighbors = multimap(links)" above
-        result[key].append(val) # add key value pair to defaultdict
+def multimap(pairs) -> dict:     # "-> dict" is function annotation https://peps.python.org/pep-3107/
+                                 # "Given (key, val) pairs, make a dict of {key: [val,...]}."
+    result = defaultdict(list)   # "from collections import defaultdict" above; list() creates list object.
+    for key, val in pairs:       # pairs will be links, as in "self.neighbors = multimap(links)" above
+        result[key].append(val)  # add key value pair to defaultdict
     return result
+########################################################################################################################
+# run Re87
 
+# dir(<self>)                 # ?see all methods and properties... No! "list of valid attributes"
+                              # https://docs.python.org/3/library/functions.html#dir
+                              
+# <self>.__dict__             # see all attributes and values, "The namespace supporting arbitrary function attributes."
+                              # https://docs.python.org/3/reference/datamodel.html
+
+tlinks = {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118}
+tlinksNoDistances = {('A', 'Z'), ('A', 'S'), ('A', 'T')}
+tlocations = {'A': ( 76, 497), 'S': (187, 463), 'T': ( 83, 414), 'Z': (92, 539)}
+tmap = Map (tlinks, tlocations)
+tmapno = Map (tlinksNoDistances, tlocations)
+
+# print("Does tlinks dict. have distances?")
+# print(hasattr(tlinks, 'items'))
+# print(tmap.distances)
+
+# print("Does tlinksNoDistances dict. have distances?")
+# print(hasattr(tlinksNoDistances, 'items'))
+# print(tmapno.distances)
+
+# print("Does tlinks dict. have items?")
+# print(hasattr(tlinks, 'items'))
+# print(tmap.distances)
+
+print(dir(tlinks))
+#print(tlinks.__class__)
+# print(tmap.__dict__)
+# print(dict(tlinksNoDistances))
+# print(dir(tlinksNoDistances))
+# print(dir(tmap))
+
+
+
+########################################################################################################################
 # Some specific RouteProblems
 romania = Map(  # instantiate class Map with following arguments: 
     # 'links': acitons (p. 71): "`links` can be either [(v1, v2)...] pairs, or a {(v1, v2): distance...} dict."
