@@ -133,110 +133,119 @@ class Map:
         self.neighbors = multimap(links)	 # get all neighbors of all states, i.e. actions available at each state
         self.locations = locations or defaultdict(lambda: (0, 0))  # "from collections import defaultdict" above
 
+########################################################################################################################        
 # # The good, working multimap        
-# def multimap(pairs) -> dict:    # "-> dict" is function annotation https://peps.python.org/pep-3107/
-#                                 # "Given (key, val) pairs, make a dict of {key: [val,...]}."
-#     result = defaultdict(list)  # "from collections import defaultdict" above; list() creates list object....hmm 
-#     for key, val in pairs:	# pairs will be links, as in "self.neighbors = multimap(links)" above
-#        result[key].append(val)  # add key value pair to defaultdict 
+def multimap(pairs) -> dict:    # "-> dict" is function annotation https://peps.python.org/pep-3107/
+                                # "Given (key, val) pairs, make a dict of {key: [val,...]}."
+    result = defaultdict(list)  # "from collections import defaultdict" above; list() creates list object....hmm 
+    for key, val in pairs:	# pairs will be links, as in "self.neighbors = multimap(links)" above
+       result[key].append(val)  # add key value pair to defaultdict 
+    return result
+
+########################################################################################################################
+# run Re88
+
+# Saving the debugging, verbose version of mutlimap.  Does this print mostly blank dicts because print vs return? No...
+# ... I should've been printing result, the variable being modified.
+# def multimap(pairs) -> dict:     # "-> dict" is function annotation https://peps.python.org/pep-3107/
+#                                  # "Given (key, val) pairs, make a dict of {key: [val,...]}."
+#     result = defaultdict(list)   # "from collections import defaultdict" above; list() creates list object.
+#     print(bc.HEADER + "printing multimap steps in detail...." + bc.ENDC)
+#     print(bc.OKBLUE + "\nBefore the for loop..." + bc.ENDC)
+#     # print(defaultdict(list))  # This was why, during Re87, I got no data in printing: I wasn't printing 'result'!
+#     print(bc.OKCYAN + "\nID and 'result':" )
+#     print(id(result))
+#     print(result)
+#     print(bc.ENDC)
+#     print(bc.OKGREEN + "ID and defaultdict(list)")
+#     print(id(defaultdict(list)))
+#     print(defaultdict(list))
+#     print(bc.ENDC)
+#     i=1
+#     print(bc.OKBLUE + "\nNow going into loop..." + bc.ENDC)
+#     for key, val in pairs:       # pairs will be links, as in "self.neighbors = multimap(links)" above
+#         result[key].append(val)  # add key value pair to defaultdict
+#      #  print(i)
+#      #  print(defaultdict(list))
+#         print(bc.OKCYAN + "ID and 'result' in loop:" )
+#         print(i)
+#         print(id(result))
+#         print(result)
+#         print(bc.ENDC)        
+#         i = i+1
+#     print(bc.OKBLUE + "After loop..." + bc.ENDC)
+#     print(bc.OKCYAN + "\nID and 'result':" )
+#     print(id(result))
+#     print(result)
+#     print(bc.ENDC)
+#     print(bc.OKGREEN + "ID and defaultdict(list)")
+#     print(id(defaultdict(list)))
+#     print(defaultdict(list))
+#     print(bc.ENDC)
+#     print("Final 'result' ID and return:")
+#     print(id(result))
 #     return result
 
-# saving the debugging, verbose version of mutlimap.  Does this print mostly blank dicts because print vs return? No...
-# ... I should've been printing result, the variable being modified.
-def multimap(pairs) -> dict:     # "-> dict" is function annotation https://peps.python.org/pep-3107/
-                                 # "Given (key, val) pairs, make a dict of {key: [val,...]}."
-    result = defaultdict(list)   # "from collections import defaultdict" above; list() creates list object.
-    print(bc.HEADER + "printing multimap steps in detail...." + bc.ENDC)
-    print(bc.OKBLUE + "\nBefore the for loop..." + bc.ENDC)
-    # print(defaultdict(list))  # This was why, during Re87, I got no data in printing: I wasn't printing 'result'!
-    print(bc.OKCYAN + "\nID and 'result':" )
-    print(id(result))
-    print(result)
-    print(bc.ENDC)
-    print(bc.OKGREEN + "ID and defaultdict(list)")
-    print(id(defaultdict(list)))
-    print(defaultdict(list))
-    print(bc.ENDC)
-    i=1
-    print(bc.OKBLUE + "\nNow going into loop..." + bc.ENDC)
-    for key, val in pairs:       # pairs will be links, as in "self.neighbors = multimap(links)" above
-        result[key].append(val)  # add key value pair to defaultdict
-     #  print(i)
-     #  print(defaultdict(list))
-        print(bc.OKCYAN + "ID and 'result' in loop:" )
-        print(i)
-        print(id(result))
-        print(result)
-        print(bc.ENDC)        
-        i = i+1
-    print(bc.OKBLUE + "After loop..." + bc.ENDC)
-    print(bc.OKCYAN + "\nID and 'result':" )
-    print(id(result))
-    print(result)
-    print(bc.ENDC)
-    print(bc.OKGREEN + "ID and defaultdict(list)")
-    print(id(defaultdict(list)))
-    print(defaultdict(list))
-    print(bc.ENDC)
-    print("Final 'result' ID and return:")
-    print(id(result))
-    return result
-# # Output:
+
+# # Output of print(multimap(tlinks)) called after tlinks defined below:
+
 # ➜  Re88--BEST-FIRST-Part-7 git:(main) ✗ python BEST-FIRST-SEARCH-Re88.py
 # printing multimap steps in detail....
 
 # Before the for loop...
 
 # ID and 'result':
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {})
 
 # ID and defaultdict(list)
-# 4438591424
+# 4473946176
 # defaultdict(<class 'list'>, {})
 
 
 # Now going into loop...
 # ID and 'result' in loop:
 # 1
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {'A': ['Z']})
 
 # ID and 'result' in loop:
 # 2
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {'A': ['Z', 'S']})
 
 # ID and 'result' in loop:
 # 3
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T']})
 
 # ID and 'result' in loop:
 # 4
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma']})
 
 # ID and 'result' in loop:
 # 5
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma'], 'Momma': ['Dadda']})
 
 # After loop...
 
 # ID and 'result':
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma'], 'Momma': ['Dadda']})
 
 # ID and defaultdict(list)
-# 4438591424
+# 4473946176
 # defaultdict(<class 'list'>, {})
 
 # Final 'result' ID and return:
-# 4427426896
+# 4462783728
 # defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma'], 'Momma': ['Dadda']})
+# ➜  Re88--BEST-FIRST-Part-7 git:(main) ✗
+
 ########################################################################################################################
-# run Re87
+# run Re87 and Re88
 
 # useful probing tools: 
 # dir(<self>)                 # ?see all methods and properties... No! "list of valid attributes" ... hmmm
@@ -244,10 +253,12 @@ def multimap(pairs) -> dict:     # "-> dict" is function annotation https://peps
 # <self>.__dict__             # see all attributes and values, "The namespace supporting arbitrary function attributes."
                               # https://docs.python.org/3/reference/datamodel.html
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
 # t stands for test                              
 tlinks = {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118, ('Yo', 'Momma'): 90, ('Momma', 'Dadda'): 91}
 tlinksNoDistances = {('A', 'Z'), ('A', 'S'), ('A', 'T')}
 tlocations = {'A': ( 76, 497), 'S': (187, 463), 'T': ( 83, 414), 'Z': (92, 539)}
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 # To get symmetrical (reversible, backtrack-able) actions: 
@@ -266,20 +277,50 @@ tlocations = {'A': ( 76, 497), 'S': (187, 463), 'T': ( 83, 414), 'Z': (92, 539)}
 # https://docs.python.org/3/library/functions.html#id
 # "Return the “identity” of an object. This is an integer which is guaranteed to be unique and constant for this object
 # during its lifetime. Two objects with non-overlapping lifetimes may have the same id() value."
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 # print(id(tlinks))
 # print(tlinks) # original
 # tmap = Map (tlinks, tlocations)
 # print(id(tlinks))      
-# print(tlinks) # now modified, but why? ... SIDE EFFECTS!!! multimap is a function! So it f's up our original dictionary.
-# Output: 
+# print(tlinks) # now modified, but why? ... SIDE EFFECTS!!! multimap is a function! So it f's up our original dictionary...
+# go to "Output-tmap""
+
+# and the tlinks passed to multimap is not the original, but the post "links[v2, v1] = links[v1, v2]" version.
+# If we pass tlinks directly to multimap, we get: 
+# first, comment out tmap and two prints above; then: 
+# print(multimap(tlinks))
+# print(id(tlinks))
+# print(tlinks)
+# go to "Output-multimap"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #.
+
+# Output-tmap 
 # ➜  Re87--BEST-FIRST-Part-6 git:(main) ✗ python BEST-FIRST-SEARCH-Re87.py
 # 4330553152
 # {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118, ('Yo', 'Momma'): 90, ('Momma', 'Dadda'): 91}
 # 4330553152
 # {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118, ('Yo', 'Momma'): 90, ('Momma', 'Dadda'): 91, <NEWLINE>
 #  ('Z', 'A'): 75, ('S', 'A'): 140, ('T', 'A'): 118, ('Momma', 'Yo'): 90, ('Dadda', 'Momma'): 91}
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #.
+
+# # Output-multimap
+# ➜  Re88--BEST-FIRST-Part-7 git:(main) ✗ python BEST-FIRST-SEARCH-Re88.py
+# 4559552192 # same ID
+# {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118, ('Yo', 'Momma'): 90, ('Momma', 'Dadda'): 91} # original tlinks
+# defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma'], 'Momma': ['Dadda']}) # this is multimap's 'return'
+# 4559552192 # same ID
+# {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118, ('Yo', 'Momma'): 90, ('Momma', 'Dadda'): 91} # same as original
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# verbose multimap test:
+# print(multimap(tlinks))
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # various previous tests: 
 
 # tmapno = Map (tlinksNoDistances, tlocations)
@@ -308,10 +349,6 @@ tlocations = {'A': ( 76, 497), 'S': (187, 463), 'T': ( 83, 414), 'Z': (92, 539)}
 # print(dir(tmap))
 
 ########################################################################################################################
-# run Re88
-print(multimap(tlinks))
-
-########################################################################################################################
 # AIMA: 
 # Some specific RouteProblems
 # romania = Map(  # instantiate class Map with following arguments: 
@@ -332,4 +369,3 @@ print(multimap(tlinks))
 # r2 = RouteProblem('N', 'L', map=romania)
 # r3 = RouteProblem('E', 'T', map=romania)
 # r4 = RouteProblem('O', 'M', map=romania)
-
