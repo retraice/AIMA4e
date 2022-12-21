@@ -143,7 +143,6 @@ class Map:
 
 # saving the debugging, verbose version of mutlimap.  Does this print mostly blank dicts because print vs return? No...
 # ... I should've been printing result, the variable being modified.
-    
 def multimap(pairs) -> dict:     # "-> dict" is function annotation https://peps.python.org/pep-3107/
                                  # "Given (key, val) pairs, make a dict of {key: [val,...]}."
     result = defaultdict(list)   # "from collections import defaultdict" above; list() creates list object.
@@ -182,8 +181,60 @@ def multimap(pairs) -> dict:     # "-> dict" is function annotation https://peps
     print("Final 'result' ID and return:")
     print(id(result))
     return result
-# Output:
+# # Output:
+# ➜  Re88--BEST-FIRST-Part-7 git:(main) ✗ python BEST-FIRST-SEARCH-Re88.py
+# printing multimap steps in detail....
 
+# Before the for loop...
+
+# ID and 'result':
+# 4427426896
+# defaultdict(<class 'list'>, {})
+
+# ID and defaultdict(list)
+# 4438591424
+# defaultdict(<class 'list'>, {})
+
+
+# Now going into loop...
+# ID and 'result' in loop:
+# 1
+# 4427426896
+# defaultdict(<class 'list'>, {'A': ['Z']})
+
+# ID and 'result' in loop:
+# 2
+# 4427426896
+# defaultdict(<class 'list'>, {'A': ['Z', 'S']})
+
+# ID and 'result' in loop:
+# 3
+# 4427426896
+# defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T']})
+
+# ID and 'result' in loop:
+# 4
+# 4427426896
+# defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma']})
+
+# ID and 'result' in loop:
+# 5
+# 4427426896
+# defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma'], 'Momma': ['Dadda']})
+
+# After loop...
+
+# ID and 'result':
+# 4427426896
+# defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma'], 'Momma': ['Dadda']})
+
+# ID and defaultdict(list)
+# 4438591424
+# defaultdict(<class 'list'>, {})
+
+# Final 'result' ID and return:
+# 4427426896
+# defaultdict(<class 'list'>, {'A': ['Z', 'S', 'T'], 'Yo': ['Momma'], 'Momma': ['Dadda']})
 ########################################################################################################################
 # run Re87
 
