@@ -144,9 +144,10 @@ def multimap(pairs) -> dict:    # "-> dict" is function annotation.  "Given
                                 # list() creates list object.  defaultdict is a
                                 # "dict subclass that calls a factory function
                                 # to supply missing values" -- python.org
-    for key, val in pairs:	# pairs will be links, as in "self.neighbors =
+    for key, val in pairs:	# pairs is now our reversed tlinks. 
+                    	        # pairs will be links, as in "self.neighbors =
                                 # multimap(links)" above
-       result[key].append(val)  # add key value pair to defaultdict 
+       result[key].append(val)  # add key value pair to result 
     return result
 
 ################################################################################
@@ -159,6 +160,9 @@ tlocations = {'A': ( 76, 497), 'S': (187, 463),
 
 tpairs = {'j': 12, 'a': 13} # ValueError: not enough values to unpack (expected 2, got 1)
 newtpairs = {('j', 'a'): 12}
+
+tmap = Map(tlinks, tlocations)
+# tmap.neighbors
 
 # This shows that multimap by itself doesn't have side effects. It's the passing
 # of modified tlinks from Map to multimap that causes side effects.
