@@ -11,6 +11,7 @@ import math
 import sys
 from collections import defaultdict, deque, Counter
 from itertools import combinations
+import pdb
 
 class Problem(object):
     """The abstract class for a formal problem. A new domain subclasses this,
@@ -227,11 +228,12 @@ tmap = Map(tlinks, tlocations)
 # tmap.locations
 
 tproblem = RouteProblem('A', 'Dadda', map=tmap)
-
+tpain = tproblem  # In case we're on a boat.
 
 def f(tvalue):
     return tvalue
 
+pdb.set_trace()
 print(best_first_search(tproblem, f))
 
 ################################################################################
