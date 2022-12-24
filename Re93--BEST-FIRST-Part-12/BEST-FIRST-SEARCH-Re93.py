@@ -1,5 +1,5 @@
-""" 2022-1223f
-    Local: ReAIMA4e/Re92
+""" 2022-1224s
+    Local: ReAIMA4e/Re93
     source of (most of the) code:
     https://github.com/aimacode/aima-python/blob/master/search4e.ipynb"""
 
@@ -221,39 +221,19 @@ tlinks = {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118,
 tlocations = {'A': ( 76, 497), 'S': (187, 463), 'T': ( 83, 414), 'Z': (92, 539),
               'Yo': ( 60, 30), 'Momma': ( 87, 17), 'Dadda': (100, 40),}
 
-# tmap = Map(tlinks, tlocations)
+tmap = Map(tlinks, tlocations)
 
 # tmap.distances
 # tmap.locations
 
-# tproblem = RouteProblem('A', 'Dadda', map=tmap)
+tproblem = RouteProblem('A', 'Dadda', map=tmap)
 
-# best_first_search(tproblem, 10)
-    # output: 
-    # TypeError                                 Traceback (most recent call last)
-    # Input In [32], in <cell line: 1>()
-    # ----> 1 best_first_search(tproblem, 10)
 
-    # Input In [29], in best_first_search(problem, f)
-    #      83 def best_first_search(problem, f):           # ***PROBLEM NOT DONE***
-    #      84     # "Search nodes with minimum f(node) value first."
-    #      85     node = Node(problem.initial)             # done
-    # ---> 86     frontier = PriorityQueue([node], key=f)  # ***NOT DONE***
-    #      87     reached = {problem.initial: node}   # create dict. reached: {'<problem initial state>': '<Node(problem.initial)>',}
-    #      88     while frontier:                          # Starting with first node in frontier, ??and continuing through queue??
+def f(tvalue):
+    return tvalue
 
-    # Input In [29], in PriorityQueue.__init__(self, items, key)
-    #      65 self.items = [] # a heap of (score, item) pairs
-    #      66 for item in items:
-    # ---> 67     self.add(item)
+# best_first_search(tproblem, f)
 
-    # Input In [29], in PriorityQueue.add(self, item)
-    #      69 def add(self, item):
-    #      70     """Add item to the queuez."""
-    # ---> 71     pair = (self.key(item), item)
-    #      72     heapq.heappush(self.items, pair)
-
-    # TypeError: 'int' object is not callable
 ################################################################################
 # AIMA:
 # Some specific RouteProblems
