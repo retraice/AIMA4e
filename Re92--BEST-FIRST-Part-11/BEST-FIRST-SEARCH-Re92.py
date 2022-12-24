@@ -81,8 +81,9 @@ class PriorityQueue:
         
 def best_first_search(problem, f):           # ***PROBLEM NOT DONE***
     # "Search nodes with minimum f(node) value first."
-    node = Node(problem.initial)             # done
+    node = Node(problem.initial)             # Make node out of initial state
     frontier = PriorityQueue([node], key=f)  # ***NOT DONE***
+#    return frontier
     reached = {problem.initial: node}   # create dict. reached: {'<problem initial state>': '<Node(problem.initial)>',}
     while frontier:                          # Starting with first node in frontier, ??and continuing through queue??
         node = frontier.pop()                # set node equal to the top node in frontier, removing it from queue
