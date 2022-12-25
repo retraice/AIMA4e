@@ -38,7 +38,7 @@ class Node:
     def __init__(self, state, parent=None, action=None, path_cost=0):
         self.__dict__.update(state=state, parent=parent, action=action, path_cost=path_cost)
 
-    def __repr__(self): return '<{}>'.format(self.state)
+    def __repr__(self): return '<{} booya'.format(self.state)
     def __len__(self): return 0 if self.parent is None else (1 + len(self.parent))
     def __lt__(self, other): return self.path_cost < other.path_cost
 
@@ -213,7 +213,7 @@ def multimap(pairs) -> dict:    # "-> dict" is function annotation.  "Given
     return result
 
 ################################################################################
-# run Re90 and Re91; t stands for test
+# state space and its parts
 
 tlinks = {('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118,
           ('Yo', 'Momma'): 90, ('Momma', 'Dadda'): 91, ('T', 'Yo'): 38,}
@@ -226,13 +226,34 @@ tmap = Map(tlinks, tlocations)
 # tmap.distances
 # tmap.locations
 
+################################################################################
+# run Re93; t stands for test
 tproblem = RouteProblem('A', 'Dadda', map=tmap)
+tpain = tproblem  # In case we're on a boat.
 
+# def f(tvalue):
+#     return tvalue
 
-def f(tvalue):
-    return tvalue
+# best_first_search(tproblem, f)
 
-print(best_first_search(tproblem, f))
+## ideas
+# debugger # nope
+
+def f(dvalue):
+    return 'F-you'
+
+# In [16]: node = Node(tproblem.initial)
+
+# In [17]: node
+# Out[17]: <A>
+
+# In [18]: frontier = PriorityQueue([node], key=f)
+
+# In [19]: frontier.items
+# Out[19]: [('F-you', <A>)]
+
+# for straight python: 
+# print(best_first_search(tproblem, f))
 
 ################################################################################
 # AIMA:
