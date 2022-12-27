@@ -1,0 +1,31 @@
+;; -*- mode: emacs-lisp; lexical-binding:t; coding: utf-8-emacs; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Mon Dec 26 18:52:15 2022
+;; Desktop file format version 208
+;; Emacs version 28.2
+
+;; Global section:
+(setq desktop-saved-frameset [frameset 1 (25514 13231 382760 0) (desktop . "208") "jeffre@JeffRes-Mini" nil nil ((((minibuffer . t) (tty-type . "xterm-256color") (tty . "/dev/tty") (display-type . color) (background-mode . dark) (menu-bar-lines . 0) (background-color . "black") (foreground-color . "WhiteSmoke") (font . "tty") (height . 46) (width . 191) (modeline . t) (unsplittable) (tab-bar-lines . 0) (frameset--id . "8495-5D57-5CA8-C118") (frameset--mini t)) ((min-height . 8) (min-width . 10) (min-height-ignore . 4) (min-width-ignore . 6) (min-height-safe . 2) (min-width-safe . 2) (min-pixel-height . 8) (min-pixel-width . 10) (min-pixel-height-ignore . 4) (min-pixel-width-ignore . 6) (min-pixel-height-safe . 2) (min-pixel-width-safe . 2)) vc (pixel-width . 191) (pixel-height . 45) (total-width . 191) (total-height . 45) (normal-height . 1.0) (normal-width . 1.0) (combination-limit) (leaf (pixel-width . 191) (pixel-height . 23) (total-width . 191) (total-height . 23) (normal-height . 0.5) (normal-width . 1.0) (buffer "BEST-FIRST-SEARCH-Re95.py" (selected . t) (hscroll . 0) (fringes 0 0 nil nil) (margins 4) (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0) (dedicated) (point . 1) (start . 1))) (leaf (last . t) (pixel-width . 191) (pixel-height . 22) (total-width . 191) (total-height . 22) (normal-height . 0.5) (normal-width . 1.0) (buffer "BEST-FIRST-SEARCH-Re95.py" (selected) (hscroll . 0) (fringes 0 0 nil nil) (margins 4) (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0) (dedicated) (point . 1) (start . 1)))))])
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+(setq file-name-history '("~/Dropbox/AJcode/JeffCode/AIMA/ReAIMA4e/Re95--BEST-FIRST-Part-14/" "~/Dropbox/AJcode/JeffCode/AIMA/ReAIMA4e/Re95--BEST-FIRST-Part-14/BEST-FIRST-SEARCH-Re95.py"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 208
+  "/Users/jeffre/Dropbox/AJcode/JeffCode/AIMA/ReAIMA4e/Re95--BEST-FIRST-Part-14/BEST-FIRST-SEARCH-Re95.py"
+  "BEST-FIRST-SEARCH-Re95.py"
+  'python-mode
+  '(eldoc-mode linum-mode fold-this-persistent-mode hs-minor-mode elpy-mode company-mode yas-minor-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((tab-width . 8) (indent-tabs-mode) (buffer-display-time 25514 13226 799738 0) (buffer-file-coding-system . undecided-unix) (truncate-lines . t))
+  '((mark-ring nil)))
+

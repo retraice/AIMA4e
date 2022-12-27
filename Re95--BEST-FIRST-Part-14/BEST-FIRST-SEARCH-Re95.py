@@ -1,5 +1,5 @@
-""" 2022-1225u
-    Local: ReAIMA4e/Re94
+""" 2022-1226m
+    Local: ReAIMA4e/Re95
     source of (most of the) code:
     https://github.com/aimacode/aima-python/blob/master/search4e.ipynb"""
 
@@ -100,7 +100,8 @@ class PriorityQueue:
         print(bc.WARNING + '...PriorityQueue self.pop method was called...', bc.ENDC)
         print(bc.WARNING + '...PriorityQueue self.items...                ', self.items)
         return heapq.heappop(self.items)[1]
-    
+#        print(bc.WARNING + '...PriorityQueue self.items...                ', self.items) # doesn't work!
+        
     def top(self): 
         print(bc.WARNING + '...PriorityQueue self.top method was called...', bc.ENDC)
         print(bc.WARNING + '...PriorityQueue self.items...                ', self.items)
@@ -120,7 +121,7 @@ def best_first_search(problem, f):
     reached = {problem.initial: node}   # create dict. reached: {'<problem initial state>': '<Node(problem.initial)>',}
     print(bc.REACHED +      'First *reached* dict...                       ', reached, bc.ENDC, "\n") 
     while frontier:                          # Starting with first node in frontier, ??and continuing through queue??
-
+        print("Just entered while loop....")
         print(bc.NODE +     '...*node* before frontier.pop()               ', node)
         print(bc.FRONTIER + '...*frontier.items* before frontier.pop()     ', frontier.items)
         node = frontier.pop()                # set node equal to the top node in frontier, removing it from queue
@@ -172,7 +173,7 @@ class RouteProblem(Problem): # e.g. atobproblem = RouteProblem('A', 'B',
 
 def straight_line_distance(A, B):  # seems to be for informed h search
     "Straight-line distance between two points."
-    return sum(abs(a - b)**2 for (a, b) in zip(A, B)) ** 0.5
+    return sum(abs(a - b)**2 for (a, b) in zip(A, B)) ** 0.5 # zip, as in zipper 
 
 class Map:
     """A map of places in a 2D world: a graph with vertexes and links between them.
@@ -254,33 +255,45 @@ tmap = Map(tlinks, tlocations)
 
 tproblem = RouteProblem('A', 'Z', map=tmap)
 tpain = tproblem  # In case we're on a boat.
-
+ 
+def ft(Fnode):
+    return round(tproblem.h(Fnode)) # h is "Straight-line distance between state and the goal."
 
 # best_first_search(tproblem, f)
-
 # def g(n): return n.path_cost
-
-def f(Fnode):
-    return round(tproblem.h(Fnode)) # h is "Straight-line distance between state and the goal."
 
 ################################################################################
 # AIMA:
 # Some specific RouteProblems
-# romania = Map(  # instantiate class Map with following arguments:
-#     # 'links': acitons (p. 71): "`links` can be either [(v1, v2)...] pairs, or a {(v1, v2): distance...} dict."
-#     {('O', 'Z'):  71, ('O', 'S'): 151, ('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118,
-#      ('L', 'T'): 111, ('L', 'M'):  70, ('D', 'M'): 75, ('C', 'D'): 120, ('C', 'R'): 146,
-#      ('C', 'P'): 138, ('R', 'S'):  80, ('F', 'S'): 99, ('B', 'F'): 211, ('B', 'P'): 101,
-#      ('B', 'G'):  90, ('B', 'U'):  85, ('H', 'U'): 98, ('E', 'H'):  86, ('U', 'V'): 142,
-#      ('I', 'V'):  92, ('I', 'N'):  87, ('P', 'R'): 97},
-#     # 'locations': states (p. 71): "Optional `locations` can be {v1: (x, y)}"
-#     {'A': ( 76, 497), 'B': (400, 327), 'C': (246, 285), 'D': (160, 296), 'E': (558, 294),
-#      'F': (285, 460), 'G': (368, 257), 'H': (548, 355), 'I': (488, 535), 'L': (162, 379),
-#      'M': (160, 343), 'N': (407, 561), 'O': (117, 580), 'P': (311, 372), 'R': (227, 412),
-#      'S': (187, 463), 'T': ( 83, 414), 'U': (471, 363), 'V': (535, 473), 'Z': (92, 539)})
+romania = Map(  # instantiate class Map with following arguments:
+    # 'links': acitons (p. 71): "`links` can be either [(v1, v2)...] pairs, or a {(v1, v2): distance...} dict."
+    {('O', 'Z'):  71, ('O', 'S'): 151, ('A', 'Z'): 75, ('A', 'S'): 140, ('A', 'T'): 118,
+     ('L', 'T'): 111, ('L', 'M'):  70, ('D', 'M'): 75, ('C', 'D'): 120, ('C', 'R'): 146,
+     ('C', 'P'): 138, ('R', 'S'):  80, ('F', 'S'): 99, ('B', 'F'): 211, ('B', 'P'): 101,
+     ('B', 'G'):  90, ('B', 'U'):  85, ('H', 'U'): 98, ('E', 'H'):  86, ('U', 'V'): 142,
+     ('I', 'V'):  92, ('I', 'N'):  87, ('P', 'R'): 97},
+    # 'locations': states (p. 71): "Optional `locations` can be {v1: (x, y)}"
+    {'A': ( 76, 497), 'B': (400, 327), 'C': (246, 285), 'D': (160, 296), 'E': (558, 294),
+     'F': (285, 460), 'G': (368, 257), 'H': (548, 355), 'I': (488, 535), 'L': (162, 379),
+     'M': (160, 343), 'N': (407, 561), 'O': (117, 580), 'P': (311, 372), 'R': (227, 412),
+     'S': (187, 463), 'T': ( 83, 414), 'U': (471, 363), 'V': (535, 473), 'Z': (92, 539)})
 
-# r0 = RouteProblem('A', 'A', map=romania)
-# r1 = RouteProblem('A', 'B', map=romania)
-# r2 = RouteProblem('N', 'L', map=romania)
-# r3 = RouteProblem('E', 'T', map=romania)
-# r4 = RouteProblem('O', 'M', map=romania)
+r0 = RouteProblem('A', 'A', map=romania)
+def f0(Fnode):
+    return round(r0.h(Fnode)) 
+
+r1 = RouteProblem('A', 'B', map=romania)
+def f1(Fnode):
+    return round(r1.h(Fnode)) 
+
+r2 = RouteProblem('N', 'L', map=romania)
+def f2(Fnode):
+    return round(r2.h(Fnode)) 
+
+r3 = RouteProblem('E', 'T', map=romania)
+def f3(Fnode):
+    return round(r3.h(Fnode)) 
+
+r4 = RouteProblem('O', 'M', map=romania)
+def f4(Fnode):
+    return round(r4.h(Fnode)) 
