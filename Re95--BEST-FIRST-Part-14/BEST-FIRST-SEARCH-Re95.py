@@ -129,11 +129,16 @@ def best_first_search(problem, f):
         print(bc.FRONTIER + '...*frontier.items* after frontier.pop()...   ', frontier.items)
 
         if problem.is_goal(node.state):      # check if the state of this node is the goal state of the problem
-            print(bc.OKGREEN + '\nHere is your goal node!...\n\tnode:', node,
-                  "\n\tstate:", node.state, "\n\tlen:", len(node),
+            print(bc.OKGREEN + '\nHere is your goal node and path_cost!...\n\tnode:', node, node.path_cost)
+            pnode = node.parent
+            print(    '            Parent nodes and cumulative path_costs:')
+            while not (pnode == None):
+                print('               ', pnode, pnode.path_cost)
+                pnode = pnode.parent
+            print("\tstate:", node.state, "\n\tlen:", len(node),
                   "\n\tparent:", node.parent, "\n\taction:", node.action,
-                  "\n\tpath_cost:", node.path_cost, "\n")
-            return node                      # if it is, return the node as output and stop
+                  "\n\tpath_cost:", node.path_cost)
+            return                       # if it is, return the node as output and stop
         for child in expand(problem, node):  # if not, expand the node and for each child node of it....
             s = child.state                  # set s equal to the child node's state
             print(bc.OKCYAN + 'In for loop, *child.state* is...' + bc.UNDERLINE, s, " ", bc.ENDC)
